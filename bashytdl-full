@@ -1,0 +1,227 @@
+#!/bin/bash
+## Dependencies: youtube-dl, wget, ffmpeg
+## This script currently checks for ffmpeg and youtube-dl on Arch/Debian/Ubuntu/RHEL systems.
+## This install works on Arch/Debian/Ubuntu/RHEL.
+
+#################################################################
+
+## This program will organize your downloads based on file format, so a playlist downloaded in audio only will be saved in the mp3 folder as an example.
+
+#################################################################
+
+## Functions
+
+function mainmenu {
+
+echo -e '\e[1;34m/--------------------------------------------------\\\e[0m'
+echo -e "\e[1;34m|\e[0m\e[1;34m     ~\e[0m		\e[1m1. MP3\e[0m			\e[0m\e[1;34m     ~\e[0m	\e[1;34m   |\e[0m"
+echo -e "\e[1;34m|\e[0m\e[1;34m   ~   ~\e[0m	\e[1m2. MP4\e[0m			\e[0m\e[1;34m   ~   ~\e[0m\e[1;34m   |\e[0m"
+echo -e "\e[1;34m|\e[0m\e[1;34m     ~\e[0m		\e[1m3. 4K \e[0m                	\e[0m\e[1;34m     ~\e[0m	\e[1;34m   |\e[0m"
+echo -e "\e[1;34m|\e[0m\e[1;34m   ~   ~\e[0m	\e[1m4. Playlist\e[0m             \e[0m\e[1;34m   ~   ~\e[0m\e[1;34m   |\e[0m"
+echo -e "\e[1;34m|\e[0m\e[1;34m     ~\e[0m		\e[1m5. Video\e[0m             	\e[0m\e[1;34m     ~\e[0m	\e[1;34m   |\e[0m"
+echo -e "\e[1;34m|\e[0m\e[1;34m   ~   ~\e[0m	\e[1m6. Clean filenames\e[0m 	\e[0m\e[1;34m   ~   ~\e[0m\e[1;34m   |\e[0m"
+echo -e "\e[1;34m|\e[0m\e[1;34m     ~\e[0m		\e[1m7. Check for updates\e[0m	\e[0m\e[1;34m     ~\e[0m	\e[1;34m   |\e[0m"
+echo -e "\e[1;34m|\e[0m\e[1;34m   ~   ~\e[0m	\e[1m8. Info\e[0m                 \e[0m\e[1;34m   ~   ~\e[0m\e[1;34m   |\e[0m"
+echo -e "\e[1;34m|\e[0m\e[1;34m     ~\e[0m    	\e[1m9. Exit\e[0m                 \e[0m\e[1;34m     ~\e[0m	\e[1;34m   |\e[0m"
+echo -e '\e[1;34m\--------------------------------------------------/\e[0m'
+echo -e "\e[1mHow would you like to download this link?\e[0m"
+
+}
+
+## This checks for youtube-dl on your local host and installs it if you wish for it to be installed.
+
+which youtube-dl
+
+if [ $? -eq 1 ]; then
+
+echo
+echo -e "\e[41mYou do not have youtube-dl installed. This program will not work without it.\e[0m"
+echo -e "\e[41mDo you wish to download youtube-dl? [y/n]\e[0m"
+echo
+
+read answer0
+
+        until [[ $answer0 =~ ^([nN][oO]|[nN])+$ ]]; do
+
+                if [[ $answer0 =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+                        sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
+			sudo chmod a+rx /usr/local/bin/youtube-dl
+                        sleep 5
+                        break
+
+                elif [[ $answer0 =~ ^([nN][oO]|[nN])+$ ]]; then
+                        continue
+
+                else
+                        echo "Please make a selection [y/n]."
+                        read answer0
+                fi
+        done
+
+elif [ $? -eq 0 ]; then
+        echo "Check for youtube-dl was successful. Launching program..."
+        sleep 1
+fi
+
+## This checks for ffmpeg on your local host and will attempt to install it based on your package manager.
+
+which ffmpeg
+
+if [ $? -eq 1 ]; then
+
+echo
+echo -e "\e[41mYou do not have ffmpeg installed. This will limit your quality of your audio downloads.\e[0m"
+echo -e "\e[41mDo you wish to download ffmpeg? [y/n]\e[0m"
+echo
+
+read answer1
+
+        until [[ $answer1 =~ ^([nN][oO]|[nN])+$ ]]; do
+
+                if [[ $answer1 =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+
+			## Check for which distribution/package manager you are running to attempt to install ffmpeg correctly.
+
+			echo "Which distribution are you running? [ 1) RHEL 2) Debian 3) Ubuntu 4) Arch ]"
+
+			read version
+
+			if [[ $version =~ ^([rR][hH][eE][lL]|[1])+$ ]]; then
+                        	sudo yum install epel-release -y
+                        	sudo rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+                       	 	sudo rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+                        	sudo yum install ffmpeg ffmpeg-devel -y
+                       		sleep 5
+                        	break
+
+			elif [[ $version =~ ^([dD][eE][bB][iI][aA][nN]|[2])+$ ]]; then
+				sudo apt-get install ffmpeg
+				sleep 5
+				break
+
+			elif [[ $version =~ ^([uU][bB][uU][nN][tT][uU]|[3])+$ ]]; then
+				sudo add-apt-repository ppa:mc3man/trusty-media
+				sudo apt-get install ffmpeg
+				break
+
+			elif [[ $version =~ ^([aA][rR][cC][hH]|[4])+$ ]]; then
+				sudo pacman -S ffmpeg || yaourt -S ffmpeg-git || packer -S ffmpeg-git
+				break
+			fi
+
+
+
+                elif [[ $answer1 =~ ^([nN][oO]|[nN])+$ ]]; then
+                        continue
+
+                else
+                        echo "Please make a selection [y/n]."
+                        read answer1
+                fi
+        done
+
+elif [ $? -eq 0 ]; then
+        echo "Check for ffmpeg was successful. Launching program..."
+        sleep 1
+fi
+
+## Variables for the directories that will store your downloads.
+
+bashytdl="/home/"$USER"/bash-ytdl/"
+mp3dir="/home/"$USER"/bash-ytdl/mp3/"
+videodir="/home/"$USER"/bash-ytdl/video/"
+fourkdir="/home/"$USER"/bash-ytdl/4k/"
+playlistdir="/home/"$USER"/bash-ytdl/playlist/"
+mp4dir="/home/"$USER"/bash-ytdl/mp4"
+
+## If statement to create the directories if they do not already exist/were deleted.
+
+if [ ! -d $bashytdl ]; then
+	mkdir -p $bashytdl
+	mkdir -p $mp3dir
+	mkdir -p $videodir
+	mkdir -p $fourkdir
+	mkdir -p $playlistdir
+	mkdir -p $mp4dir
+	echo "Files will be stored in ~/bash-ytdl"
+	sleep 5
+fi
+
+## Logic and menu structure using a while loop and case statements
+
+counter=0
+
+while [ $counter -ne 1 ]; do
+
+clear
+
+mainmenu
+
+read opt
+
+case $opt in
+        1)
+                echo "Input URL of MP3."
+                echo "This will download the link and save it as a .mp3 format."
+                read mp3url
+                youtube-dl -i --no-playlist --extract-audio --audio-format mp3 -o ""$mp3dir"%(title)s.%(ext)s" $mp3url
+                ;;
+        2)
+                echo "Input URL of MP4."
+                echo "This will download the link and save it as a .mp4 format."
+                read mp4url
+                youtube-dl -i --no-playlist -f mp4 -o ""$mp4dir"%(title)s.%(ext)s" $mp4url
+                ;;
+        3)
+                echo "Input URL of 4K video."
+                echo "This will download the 4K video in the best quality and format possible."
+                read fourkurl
+                youtube-dl -i --no-playlist -f bestvideo+bestaudio -o ""$fourkdir"%(title)s.%(ext)s" $fourkurl
+                ;;
+        4)
+                echo "PLease select which type of download you want [ 1) MP3 2) Video ]"
+                echo "This will download the playlists in the best quality and format possible."
+		read playlistanswer
+		if [[ $playlistanswer =~ ^([mM][pP][3]|[mp3]|[1])+$ ]]; then
+			echo "You chose MP3. Enter your playlist URL here."
+			read mp3url
+			youtube-dl -i --yes-playlist --extract-audio --audio-format mp3 -o ""$mp3dir"%(title)s.%(ext)s" $mp3url
+
+		elif [[ $playlistanswer =~ ^([vV][iI][dD][eE][oO]|[vV][iI][dD]|[video]|[2])+$ ]]; then
+			echo "You chose Video. Enter your playlist URL here."
+                	read playlisturl
+                	youtube-dl -i -f best --yes-playlist -o ""$playlistdir"%(title)s.%(ext)s" $playlisturl
+		fi
+		;;
+	5)
+                echo "Input URL of video."
+                echo "This will download the video with the best quality and format possible."
+                read vidurl
+                youtube-dl -i -f best --no-playlist -o ""$videodir"%(title)s.%(ext)s" $vidurl
+                ;;
+        6)
+                echo "This will run sed on your filenames to attempt to clean them up for better readability."
+                echo "This pattern is meant for files that are downloaded from YouTube."
+		echo "Please specify the absolute path to the directory as well as the asterisk (*). Example: /home/user/bash-ytdl/*"
+		read dir
+                for file in $dir ; do mv "$file" "`echo $file | sed 's/[a-zA-Z0-9]\{11\}//g' | sed s/[_][-][_]/'-'/g | sed s/[_]/' '/g''`"; done;
+                ;;
+        7)
+                echo "Checking for an update..."
+                yum update youtube-dl -y
+                ;;
+	8)
+		echo "Placeholder information about this project."
+		read
+		;;
+        9)
+                counter=1
+                exit 126
+                ;;
+        *)
+                echo "Please use another option."
+		read
+                ;;
+
+esac
+done
