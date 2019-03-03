@@ -105,7 +105,7 @@ read answer1
 				break
 
 			elif [[ $version =~ ^([aA][rR][cC][hH]|[4])+$ ]]; then
-				sudo pacman -S ffmpeg || yaourt -S ffmpeg-git || packer -S ffmpeg-git
+				sudo pacman -S ffmpeg || sudo yaourt -S ffmpeg-git || sudo packer -S ffmpeg-git
 				break
 			fi
 
@@ -208,7 +208,7 @@ case $opt in
                 ;;
         7)
                 echo "Checking for an update..."
-                yum update youtube-dl -y
+                sudo yum update youtube-dl -y || sudo apt install youtube-dl || sudo pacman -S youtube-dl || sudo yaourt -S youtube-dl || sudo packer -S youtube-dl
                 ;;
 	8)
 		echo "Placeholder information about this project."
