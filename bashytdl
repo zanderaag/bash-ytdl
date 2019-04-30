@@ -1,16 +1,12 @@
 #!/bin/bash
-## Dependencies: youtube-dl, wget, ffmpeg
-## This script currently checks for ffmpeg and youtube-dl on Arch/Debian/Ubuntu/RHEL systems.
-## This install works on Arch/Debian/Ubuntu/RHEL.
 
-#################################################################
+#Dependencies: youtube-dl, wget, ffmpeg
+#This script currently checks for ffmpeg and youtube-dl on Arch/Debian/Ubuntu/RHEL systems.
+#This install works on Arch/Debian/Ubuntu/RHEL.
+#Note: If for some reason it will not download your files. Remove the youtubedl version you have and use the one in the script.
+#This program will organize your downloads based on file format, so a playlist downloaded in audio only will be saved in the mp3 folder as an example.
 
-## This program will organize your downloads based on file format, so a playlist downloaded in audio only will be saved in the mp3 folder as an example.
-
-#################################################################
-
-## Functions
-
+#Functions
 function mainmenu {
 
 echo -e '\e[1;34m/--------------------------------------------------\\\e[0m'
@@ -28,8 +24,7 @@ echo -e "\e[1mHow would you like to download this link?\e[0m"
 
 }
 
-## This checks for youtube-dl on your local host and installs it if you wish for it to be installed.
-
+#This checks for youtube-dl on your local host and installs it if you wish for it to be installed.
 which youtube-dl
 
 if [ $? -eq 1 ]; then
@@ -63,8 +58,7 @@ elif [ $? -eq 0 ]; then
         sleep 1
 fi
 
-## This checks for ffmpeg on your local host and will attempt to install it based on your package manager.
-
+#This checks for ffmpeg on your local host and will attempt to install it based on your package manager.
 which ffmpeg
 
 if [ $? -eq 1 ]; then
@@ -80,8 +74,7 @@ read answer1
 
                 if [[ $answer1 =~ ^([yY][eE][sS]|[yY])+$ ]]; then
 
-			## Check for which distribution/package manager you are running to attempt to install ffmpeg correctly.
-
+			#Check for which distribution/package manager you are running to attempt to install ffmpeg correctly.
 			echo "Which distribution are you running? [ 1) RHEL 2) Debian 3) Ubuntu 4) Arch ]"
 
 			read version
@@ -109,8 +102,6 @@ read answer1
 				break
 			fi
 
-
-
                 elif [[ $answer1 =~ ^([nN][oO]|[nN])+$ ]]; then
                         continue
 
@@ -125,8 +116,7 @@ elif [ $? -eq 0 ]; then
         sleep 1
 fi
 
-## Variables for the directories that will store your downloads.
-
+#Variables for the directories that will store your downloads.
 bashytdl="/home/"$USER"/bash-ytdl/"
 mp3dir="/home/"$USER"/bash-ytdl/mp3/"
 videodir="/home/"$USER"/bash-ytdl/video/"
@@ -134,8 +124,7 @@ fourkdir="/home/"$USER"/bash-ytdl/4k/"
 playlistdir="/home/"$USER"/bash-ytdl/playlist/"
 mp4dir="/home/"$USER"/bash-ytdl/mp4"
 
-## If statement to create the directories if they do not already exist/were deleted.
-
+#If statement to create the directories if they do not already exist/were deleted.
 if [ ! -d $bashytdl ]; then
 	mkdir -p $bashytdl
 	mkdir -p $mp3dir
@@ -147,8 +136,7 @@ if [ ! -d $bashytdl ]; then
 	sleep 5
 fi
 
-## Logic and menu structure using a while loop and case statements
-
+#Logic and menu structure using a while loop and case statements
 counter=0
 
 while [ $counter -ne 1 ]; do
