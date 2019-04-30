@@ -122,7 +122,7 @@ mp3dir="/home/"$USER"/bash-ytdl/mp3/"
 videodir="/home/"$USER"/bash-ytdl/video/"
 fourkdir="/home/"$USER"/bash-ytdl/4k/"
 playlistdir="/home/"$USER"/bash-ytdl/playlist/"
-mp4dir="/home/"$USER"/bash-ytdl/mp4"
+mp4dir="/home/"$USER"/bash-ytdl/mp4/"
 
 #If statement to create the directories if they do not already exist/were deleted.
 if [ ! -d $bashytdl ]; then
