@@ -10,3 +10,5 @@ This program uses wget, ffmpeg and youtube-dl as dependencies. Other dependencie
 based on your distribution.
 
 This program is meant for fun and not to be used in any malicious ways or for profit, so use it accordingly!
+
+Please note that due to dependancies and issues with version control on my end, this script does not work for CentOS8! I will someday re-write this entirely in Python to make it better, till then... :)
